@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: book-service
+          uri: lb://book-service
+          predicates:
+            - Path=/api/books/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: bookService
+                fallbackUri: forward:/fallback/books
+            - AddRequestHeader=X-Source, api-gateway
